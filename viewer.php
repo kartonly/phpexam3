@@ -37,6 +37,14 @@ $sql='SELECT * FROM std_941.form  WHERE ids='.$id.' ORDER BY qu1 LIMIT '.$diapaz
 if ($_GET['sort'] == 'birth')
 $sql='SELECT * FROM std_941.form  WHERE ids='.$id.' ORDER BY qu1 LIMIT '.$diapazon.', 1';
 $sql_res=mysqli_query($mysqli, $sql);
+
+while( $row=mysqli_fetch_assoc($sql_res) ) // пока есть записи
+{
+$row['isclose'];
+if ($row['isclose']==1){
+  echo 'Сессия была закрыта';
+}
+else{
 $ret='
 <!DOCTYPE html>
 <html>
@@ -55,8 +63,7 @@ $ret='
 <body>
 <h1>Заполните форму</h1>
 <p><a href="destroy.php">Закрыть сессию</a></p>'; // строка с будущим контентом страницы
-while( $row=mysqli_fetch_assoc($sql_res) ) // пока есть записи
-{
+
 $ret.='
 <form class="form-control" name="form_sess" method="post" action="">
 <label for="first">'.$row['qu1'].'</label>
@@ -68,20 +75,22 @@ $ret.='
 <label for="fourth">'.$row['qu4'].'</label>
 <textarea class="form-control" type="text" id="fourth" name="fourth" placeholder="Четвертый вопрос"></textarea>
 <label>'.$row['qu5'].'</label>
-<input class="form-control" type="radio" id="Choice1" name="choice" value="'.$row['qu51'].'">
+<input class="form-control" type="radio" id="Choice1" name="choice" value="'.$row['qu51b'].'">
 <label for="Choice1">'.$row['qu52'].'</label>
-<input class="form-control" type="radio" id="Choice2" name="choice" value="'.$row['qu52'].'">
+<input class="form-control" type="radio" id="Choice2" name="choice" value="'.$row['qu52b'].'">
 <label for="Choice2">'.$row['qu52'].'</label>
 <label>'.$row['qu6'].'</label>
-<input class="form-control" type="checkbox" id="chk1" name="chk1" value="'.$row['qu61'].'">
+<input class="form-control" type="checkbox" id="chk1" name="chk1" value="'.$row['qu61b'].'">
   <label for="chk1">'.$row['qu61'].'</label>
-  <input class="form-control" type="checkbox" id="chk2" name="chk2" value="'.$row['qu62'].'">
+  <input class="form-control" type="checkbox" id="chk2" name="chk2" value="'.$row['qu62b'].'">
   <label for="chk3">'.$row['qu62'].'</label>
-  <input class="form-control" type="checkbox" id="chk3" name="chk3" value="'.$row['qu63'].'">
+  <input class="form-control" type="checkbox" id="chk3" name="chk3" value="'.$row['qu63b'].'">
   <label for="chk1">'.$row['qu63'].'</label>
   <input type="submit" name="buttonupdate" class="form-control" value="Отправить форму" > </form>
 ';
 }
+
+
 $ret.='</body></html>'; // заканчиваем формирование таблицы с контентом
 if( isset($_POST['buttonupdate']))
 { 
@@ -96,8 +105,19 @@ $chk2 = (string)$_POST["chk2"];
 $chk3 = (string)$_POST["chk3"];
   // формируем и выполняем SQL-запрос для добавления записи
 $pre_id=mysqli_query($mysqli, 'SELECT * FROM std_941.results');
-$id=mysqli_num_rows($pre_id)+1;
-$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results(first, second, third, fourth, choice, chk1, chk2, chk3, id, ids) VALUES ("'.$first.','.$second.','.$third.','.$fourth.','.$choice.','.$chk1.','.$chk2.','.$chk3.','.$id.','.$ids.'")');
+$id=2;
+$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results (first, second, third, fourth, choice, chk1, chk2, chk3, ids, id) VALUES ("'.
+(string)($_POST["first"]).'","'.
+(string)$_POST["second"].'", "'.
+(string)($_POST["third"]).'", "'.
+(string)$_POST["fourth"].'", "'.
+(string)($_POST["choice"]).'", "'.
+(string)$_POST["chk1"].'", "'.
+(string)$_POST["chk2"].'", "'.
+(string)$_POST["chk3"].'", "'.
+$id.'", "'.
+(int)($_POST["id"]).
+'")');
 header("Refresh: 0");}
 
 
@@ -129,8 +149,20 @@ $chk3 = (string)$_POST["chk3"];
   // формируем и выполняем SQL-запрос для добавления записи
 $pre_id=mysqli_query($mysqli, 'SELECT * FROM std_941.results');
 $id=mysqli_num_rows($pre_id)+1;
-$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results(first, second, third, fourth, choice, chk1, chk2, chk3, id, ids) VALUES ("'.$first.','.$second.','.$third.','.$fourth.','.$choice.','.$chk1.','.$chk2.','.$chk3.','.$id.','.$ids.'")');
+$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results(first, second, third, fourth, choice, chk1, chk2, chk3, ids, id) VALUES ("'.
+(string)($_POST["first"]).'","'.
+(string)$_POST["second"].'", "'.
+(string)($_POST["third"]).'", "'.
+(string)$_POST["fourth"].'", "'.
+(string)($_POST["choice"]).'", "'.
+(string)$_POST["chk1"].'", "'.
+(string)$_POST["chk2"].'", "'.
+(string)$_POST["chk3"].'", "'.
+$id.'", "'.
+(int)($_POST["id"]).
+'")');
 header("Refresh: 0");}
 } }
-}
+}}
+
 ?>

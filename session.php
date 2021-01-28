@@ -9,7 +9,7 @@ if(!isset($_GET['sort']) || ($_GET['sort']!='byid' && $_GET['sort']!='fam' &&   
 // устанавливаемсортировкупоумолчанию// формируемконтентстраницыспомощьюфункцииивыводимего
 echo getFriendsList($_GET['sort'], $_GET['pg']); 
 
-    $mysqli = mysqli_connect('std-mysql', 'std_941', '84996111636', 'std_941');
+$mysqli = mysqli_connect('std-mysql', 'std_941', '84996111636', 'std_941');
 if( mysqli_connect_errno() ) // проверяем корректность подключения
 echo 'Ошибка подключения к БД: '.mysqli_connect_error();
 // если были переданы данные для добавления в БД
@@ -28,7 +28,7 @@ echo 'Ошибка подключения к БД: '.mysqli_connect_error();
 {
 $pre_id=mysqli_query($mysqli, 'SELECT * FROM std_941.results');
 $id=mysqli_num_rows($pre_id)+1;
-$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results(first, second, third, fourth, choice, chk1, chk2, chk3, id, ids) VALUES ("'.$first.','.$second.','.$third.','.$fourth.','.$choice.','.$chk1.','.$chk2.','.$chk3.','.$ip.','.$id.'")');
+$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results (first, second, third, fourth, choice, chk1, chk2, chk3, id, ids) VALUES ("'.$first.','.$second.','.$third.','.$fourth.','.$choice.','.$chk1.','.$chk2.','.$chk3.','.$ip.','.$id.'")');
  }
       if(empty($first)):
           $message = 'Поле `ваш первый вопрос` обязательно к заполнению!';
@@ -74,5 +74,4 @@ $sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results(first, second, third,
  }
     endif;
     
- 
     ?>

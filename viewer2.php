@@ -145,10 +145,11 @@ header("Refresh: 0");
 };
 
 if( isset($_POST['del'])){
+  $true=1;
   $numup = $_POST['numup'];
   $numup=(int)$_POST['numup'];
-$mysqli = mysqli_connect('std-mysql', 'std_941', '84996111636', 'std_941');
-  $query ="DELETE FROM form WHERE ids = ".$numup."";
+  $mysqli = mysqli_connect('std-mysql', 'std_941', '84996111636', 'std_941');
+  $query ="UPDATE std_941.form SET  isclose=true  WHERE ids = ".$numup."";
   $result = mysqli_query($mysqli, $query) or die("Ошибка " . mysqli_error($mysqli)); 
 
   // перенаправление

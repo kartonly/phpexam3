@@ -23,11 +23,38 @@ $sql='SELECT * FROM std_941.results ORDER BY ids LIMIT '.$diapazon.', 10';
 if ($_GET['sort'] == 'birth')
 $sql='SELECT * FROM std_941.results ORDER BY ids LIMIT '.$diapazon.', 10';
 $sql_res=mysqli_query($mysqli, $sql);
+
+
+
+
+$summa='SELECT SUM(choice) AS value_sum FROM std_941.results ORDER BY ids';
+$summa_res=mysqli_query($mysqli, $summa);
+
+while ($row2 = mysqli_fetch_assoc($summa_res)){echo 'Среднее значение баллов '.$row2['value_sum']; }
+
+
+
 $ret='<table style="border:2px solid black;">'; // строка с будущим контентом страницы
 while( $row=mysqli_fetch_assoc($sql_res) ) // пока есть записи
 {
+    $summ=$row['chk1']+$row['chk2']+$row['chk3']+$row['choice'];
 // выводим каждую запись как строку таблицы
-$ret.='<tr style="border:2px solid black;"><td>'.$row['first'].'</td>
+$ret.='
+<tr>
+    <th>1 Ответ</th>
+    <th>2 Ответ</th>
+    <th>3 Ответ</th>
+    <th>4 Ответ</th>
+    <th>Выбранный вариант</th>
+    <th>Вариант 1</th>
+    <th>Варинат 2</th>
+    <th>Вариант 3</th>
+    <th>ID сессии</th>
+    <th>ID ответа</th>
+    <th>Заработанно баллов</th>
+   </tr>
+
+<tr style="border:2px solid black;"><td>'.$row['first'].'</td>
 <td>'.$row['second'].'</td>
 <td>'.$row['third'].'</td>
 <td>'.$row['fourth'].'</td>
@@ -35,7 +62,9 @@ $ret.='<tr style="border:2px solid black;"><td>'.$row['first'].'</td>
 <td>'.$row['chk1'].'</td>
 <td>'.$row['chk2'].'</td>
 <td>'.$row['chk3'].'</td>
-<td>'.$row['ids'].'</td></tr>';
+<td>'.$row['ids'].'</td>
+<td>'.$row['id'].'</td>
+<td>'.$summ.'</td></tr>';
 }
 $ret.='</table>'; // заканчиваем формирование таблицы с контентом
 if( $PAGES>1 ) // если страниц больше одной – добавляем пагинацию
