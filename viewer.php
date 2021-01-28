@@ -4,6 +4,13 @@
 <?php
 function getFriendsList($type, $page)
 {
+  session_start();
+    $_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
+    $_SESSION['time'] = date("H:i:s");
+    $date=date("H:i:s");
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $_SESSION['ip'] = $ip;
+
 echo '
 Введите id сессии<br>
 <form class="form-control" name="form_id" method="post" action="">
@@ -65,15 +72,15 @@ $ret='
 <p><a href="destroy.php">Закрыть сессию</a></p>'; // строка с будущим контентом страницы
 
 $ret.='
-<form class="form-control" name="form_sess" method="post" action="">
+<form class="form-control" name="form_sess" method="post" action="add.php">
 <label for="first">'.$row['qu1'].'</label>
-<input class="form-control" type="text" id="first" name="first" placeholder="Первый вопрос">
+<input class="form-control" type="text" id="first" name="first" placeholder="Первый вопрос" required>
 <label for="second">'.$row['qu2'].'</label>
-<input class="form-control" type="text" id="first" name="second" placeholder="Второй вопрос">
+<input class="form-control" type="text" id="first" name="second" placeholder="Второй вопрос" required>
 <label for="third">'.$row['qu3'].'</label>
-<input class="form-control" type="text" id="third" name="third" placeholder="Третий вопрос">
+<input class="form-control" type="text" id="third" name="third" placeholder="Третий вопрос" required>
 <label for="fourth">'.$row['qu4'].'</label>
-<textarea class="form-control" type="text" id="fourth" name="fourth" placeholder="Четвертый вопрос"></textarea>
+<textarea class="form-control" type="text" id="fourth" name="fourth" placeholder="Четвертый вопрос" required></textarea>
 <label>'.$row['qu5'].'</label>
 <input class="form-control" type="radio" id="Choice1" name="choice" value="'.$row['qu51b'].'">
 <label for="Choice1">'.$row['qu52'].'</label>
@@ -86,82 +93,19 @@ $ret.='
   <label for="chk3">'.$row['qu62'].'</label>
   <input class="form-control" type="checkbox" id="chk3" name="chk3" value="'.$row['qu63b'].'">
   <label for="chk1">'.$row['qu63'].'</label>
-  <input type="submit" name="buttonupdate" class="form-control" value="Отправить форму" > </form>
+  <input type="submit" id="buttonupdate2" name="buttonupdate2" class="form-control" value="Отправить форму" > </form>
 ';
 }
 
 
 $ret.='</body></html>'; // заканчиваем формирование таблицы с контентом
-if( isset($_POST['buttonupdate']))
-{ 
-$ids=(int)($_POST["id"]);
-$first = (string)($_POST["first"]);
-$second = (string)$_POST["second"];
-$third = (string)($_POST["third"]);
-$fourth = (string)$_POST["fourth"];
-$choice = (string)($_POST["choice"]);
-$chk1 = (string)$_POST["chk1"];
-$chk2 = (string)$_POST["chk2"];
-$chk3 = (string)$_POST["chk3"];
-  // формируем и выполняем SQL-запрос для добавления записи
-$pre_id=mysqli_query($mysqli, 'SELECT * FROM std_941.results');
-$id=2;
-$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results (first, second, third, fourth, choice, chk1, chk2, chk3, ids, id) VALUES ("'.
-(string)($_POST["first"]).'","'.
-(string)$_POST["second"].'", "'.
-(string)($_POST["third"]).'", "'.
-(string)$_POST["fourth"].'", "'.
-(string)($_POST["choice"]).'", "'.
-(string)$_POST["chk1"].'", "'.
-(string)$_POST["chk2"].'", "'.
-(string)$_POST["chk3"].'", "'.
-$id.'", "'.
-(int)($_POST["id"]).
-'")');
-header("Refresh: 0");}
 
 
-if( $PAGES>1 ) // если страниц больше одной – добавляем пагинацию
-{
-$ret.='<div id="pages">Выберите страницу: '; // блок пагинации
-for($i=0; $i<$PAGES; $i++) // цикл для всех страниц пагинации
-if( $i != $page ) // если не текущая страница
-$ret.='<a href="?p=viewer&pg='.$i.'&sort='.$_GET['sort'].'"> '.($i+1).'</a>';
-else // если текущая страница
-$ret.='<span> '.($i+1).'</span>';
-$ret.='</div>';
-}
 return $ret; // возвращаем сформированный контент
 }
 // если запрос выполнен некорректно
 return 'Неизвестная ошибка'; // возвращаем сообщение
-if( isset($_POST['buttonupdate']))
-{ 
-$ids=(int)($_POST["id"]);
-$first = (string)($_POST["first"]);
-$second = (string)$_POST["second"];
-$third = (string)($_POST["third"]);
-$fourth = (string)$_POST["fourth"];
-$choice = (string)($_POST["choice"]);
-$chk1 = (string)$_POST["chk1"];
-$chk2 = (string)$_POST["chk2"];
-$chk3 = (string)$_POST["chk3"];
-  // формируем и выполняем SQL-запрос для добавления записи
-$pre_id=mysqli_query($mysqli, 'SELECT * FROM std_941.results');
-$id=mysqli_num_rows($pre_id)+1;
-$sql_res=mysqli_query($mysqli,'INSERT INTO std_941.results(first, second, third, fourth, choice, chk1, chk2, chk3, ids, id) VALUES ("'.
-(string)($_POST["first"]).'","'.
-(string)$_POST["second"].'", "'.
-(string)($_POST["third"]).'", "'.
-(string)$_POST["fourth"].'", "'.
-(string)($_POST["choice"]).'", "'.
-(string)$_POST["chk1"].'", "'.
-(string)$_POST["chk2"].'", "'.
-(string)$_POST["chk3"].'", "'.
-$id.'", "'.
-(int)($_POST["id"]).
-'")');
-header("Refresh: 0");}
+
 } }
 }}
 

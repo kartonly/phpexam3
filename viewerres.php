@@ -27,10 +27,12 @@ $sql_res=mysqli_query($mysqli, $sql);
 
 
 
-$summa='SELECT SUM(choice) AS value_sum FROM std_941.results ORDER BY ids';
+$summa='SELECT AVG(choice) AS value_sum FROM std_941.results ORDER BY ids';
 $summa_res=mysqli_query($mysqli, $summa);
 
 while ($row2 = mysqli_fetch_assoc($summa_res)){echo 'Среднее значение баллов '.$row2['value_sum']; }
+
+
 
 
 
@@ -52,6 +54,8 @@ $ret.='
     <th>ID сессии</th>
     <th>ID ответа</th>
     <th>Заработанно баллов</th>
+    <th>IP</th>
+    <th>Время начала сессии</th>
    </tr>
 
 <tr style="border:2px solid black;"><td>'.$row['first'].'</td>
@@ -64,7 +68,10 @@ $ret.='
 <td>'.$row['chk3'].'</td>
 <td>'.$row['ids'].'</td>
 <td>'.$row['id'].'</td>
-<td>'.$summ.'</td></tr>';
+<td>'.$summ.'</td>
+<td>'.$row['clientid'].'</td>
+<td>'.$row['date'].'</td>
+</tr>';
 }
 $ret.='</table>'; // заканчиваем формирование таблицы с контентом
 if( $PAGES>1 ) // если страниц больше одной – добавляем пагинацию
